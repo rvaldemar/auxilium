@@ -2,7 +2,7 @@
 class Api::V1::BaseController < ActionController::API
   include Pundit
 
-  after_action :verify_authorized, except: :index
+  # after_action :verify_authorized, except: [:index, :show, :create, :update]
   after_action :verify_policy_scoped, only: :index
 
   rescue_from StandardError,                with: :internal_server_error
