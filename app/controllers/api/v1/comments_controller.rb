@@ -5,8 +5,9 @@ class Api::V1::CommentsController < Api::V1::BaseController
   # Create action
   def create
     @comment = Comment.new(comment_params)
-    user = User.find_by(name: params[:comment][:username])
-    @comment.user_id = user.id
+    @user = User.find_by(name: params[:comment][:username])
+    create_user if @user.nil?
+    @comment.user_id = @user.id
     @comment.votes = 0
     @comment.answer_id = params[:answer_id]
     if @comment.save
@@ -20,9 +21,8 @@ class Api::V1::CommentsController < Api::V1::BaseController
 
   # Update action
   def update
-    user = User.find_by(name: params[:comment][:username])
-    binding.pry
-    if @comment.user_id == user.id
+    @user = User.find_by(name: params[:comment][:username])
+    if @comment.user_id == @user.id
       if @comment.update(comment_params)
         render :show
       else
@@ -35,7 +35,7 @@ class Api::V1::CommentsController < Api::V1::BaseController
 
   # Destroy action
   def destroy
-    user = User.find_by(name: params[:comment][:username])
+    @user = User.find_by(name: params[:comment][:username])
     # if @comment.user_id == user.id
       @comment.destroy
       head :no_content and return
@@ -55,5 +55,11 @@ class Api::V1::CommentsController < Api::V1::BaseController
 
   def set_comment
     @comment = Comment.find(params[:id])
+  end
+
+    def create_user
+    @user = User.new(name: params[:comment][:username], email: params[:comment][:email], avatar: params[:comment][:avatar] password: "123654")
+    @user.save
+    @user
   end
 end
