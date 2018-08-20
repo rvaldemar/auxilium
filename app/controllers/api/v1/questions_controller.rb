@@ -56,6 +56,13 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   # Destroy action
 
 
+  # Search action
+  def search
+    @questions = Question.search_by_subcategory_and_category(params[:query])
+  end
+  # Search action
+
+
   private
 
   def question_params
