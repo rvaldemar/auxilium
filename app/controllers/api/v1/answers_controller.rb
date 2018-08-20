@@ -5,8 +5,9 @@ class Api::V1::AnswersController < Api::V1::BaseController
   # Create action
   def create
     @answer = Answer.new(answer_params)
-    user = User.find_by(name: params[:answer][:username])
-    @answer.user_id = user.id
+    @user = User.find_by(name: params[:answer][:username])
+    create_user if @user.nil?
+    @answer.user_id = @user.id
     @answer.votes = 0
     @answer.question_id = params[:question_id]
     if @answer.save
@@ -20,8 +21,8 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   # Update action
   def update
-    user = User.find_by(name: params[:answer][:username])
-    if @answer.user_id == user.id
+    @user = User.find_by(name: params[:answer][:username])
+    if @answer.user_id == @user.id
       if @answer.update(answer_params)
         render :show
       else
@@ -34,8 +35,8 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   # Destroy action
   def destroy
-    user = User.find_by(name: params[:answer][:username])
-    if @answer.user_id == user.id
+    @user = User.find_by(name: params[:answer][:username])
+    if @answer.user_id == @user.id
       @answer.destroy
     # else
     #   redirect_to api_v1_questions_path
@@ -46,12 +47,17 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   private
 
-
   def answer_params
     params.require(:answer).permit(:content)
   end
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def create_user
+    @user = User.new(name: params[:answer][:username], email: params[:answer][:email], avatar: params[:answer][:avatar], password: "123654")
+    @user.save
+    @user
   end
 end
