@@ -36,9 +36,11 @@ class Api::V1::CommentsController < Api::V1::BaseController
   # Destroy action
   def destroy
     @user = User.find_by(name: params[:comment][:username])
-    # if @comment.user_id == user.id
+    if @comment.user_id == @user.id
       @comment.destroy
       head :no_content and return
+    end
+    head :no_content and return
     # else
     #   redirect_to api_v1_questions_path
     # end
@@ -58,7 +60,7 @@ class Api::V1::CommentsController < Api::V1::BaseController
   end
 
     def create_user
-    @user = User.new(name: params[:comment][:username], email: params[:comment][:email], avatar: params[:comment][:avatar] password: "123654")
+    @user = User.new(name: params[:comment][:username], email: params[:comment][:email], avatar: params[:comment][:avatar], password: "123654")
     @user.save
     @user
   end
