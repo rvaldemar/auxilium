@@ -38,8 +38,6 @@ class Api::V1::AnswersController < Api::V1::BaseController
     @user = User.find_by(name: params[:answer][:username])
     if @answer.user_id == @user.id
       @answer.destroy
-    # else
-    #   redirect_to api_v1_questions_path
     end
   end
   # Destroy action
