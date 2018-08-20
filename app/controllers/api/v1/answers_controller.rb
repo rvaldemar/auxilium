@@ -43,6 +43,31 @@ class Api::V1::AnswersController < Api::V1::BaseController
   # Destroy action
 
 
+  def upvote
+    @answer = Answer.find(params[:answer_id])
+    @user = User.find_by(name: params[:answer][:username])
+    if @answer.answer_votes.where(user_id: @user.id).length == 0
+      @answer.votes += 1
+      answer_vote = AnswerVote.create(user_id: @user.id, answer_id: @answer.id)
+      @answer.save
+      render :show and return
+    end
+    render :show
+  end
+
+  def downvote
+    @answer = Answer.find(params[:answer_id])
+    @user = User.find_by(name: params[:answer][:username])
+    if @answer.answer_votes.where(user_id: @user.id).length == 0
+      @answer.votes -= 1
+      answer_vote = AnswerVote.create(user_id: @user.id, answer_id: @answer.id)
+      @answer.save
+      render :show and return
+    end
+    render :show
+  end
+
+
   private
 
   def answer_params

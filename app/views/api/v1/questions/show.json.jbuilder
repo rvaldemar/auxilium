@@ -17,21 +17,21 @@ end
 
 json.question do
   json.extract! @question, :id, :title, :content, :category, :subcategory
-  json.extract! @question.user, :name
+  json.extract! @question.user, :name, :avatar
   key = calculates_time(@question)
   json.extract! key, :time
 
   json.answers do
     json.array! @question.answers do |answer|
       json.extract! answer, :id, :content, :votes
-      json.extract! answer.user, :name
+      json.extract! answer.user, :name, :avatar
       key = calculates_time(answer)
       json.extract! key, :time
 
       json.comments do
         json.array! answer.comments do |comment|
           json.extract! comment, :id, :content, :votes
-          json.extract! comment.user, :name
+          json.extract! comment.user, :name, :avatar
           key = calculates_time(comment)
           json.extract! key, :time
         end
