@@ -59,7 +59,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   private
 
   def question_params
-    params.require(:question).permit(:title, :content, :category)
+    params.require(:question).permit(:title, :content, :category, :subcategory)
   end
 
   def user_params
