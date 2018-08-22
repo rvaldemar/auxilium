@@ -26,7 +26,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     create_user if @user.nil?
     @question.user_id = @user.id
     if @question.save
-      render :show, status: :created
+      render :created, status: :created
     else
       render_error
     end
@@ -39,7 +39,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     @user = User.find_by(name: params[:question][:username])
     if @question.user_id == @user.id
       if @question.update(question_params)
-        render :show
+        render :created
       else
         render_error
       end
