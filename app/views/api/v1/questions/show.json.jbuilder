@@ -28,6 +28,14 @@ json.question do
       key = calculates_time(answer)
       json.extract! key, :time
 
+      json.answer_votes do
+        if answer.answer_votes.find_by(user_id: @user.id)
+          json.array! answer.answer_votes do |vote|
+            json.extract! vote, :user_id, :vote, :user_name
+          end
+        end
+      end
+
       json.comments do
         json.array! answer.comments do |comment|
           json.extract! comment, :id, :content, :votes

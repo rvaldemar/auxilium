@@ -11,6 +11,7 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   # Show action
   def show
+    @user = User.find_by(name: params[:username])
   end
   # Show action
 
