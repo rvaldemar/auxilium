@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      get 'search/:query', to: 'questions#search', as: 'search'
+      get 'search', to: 'questions#search', as: 'search'
       resources :questions, only: [:index, :show, :create, :update, :destroy] do
         resources :answers, only: [:create, :update, :destroy] do
           patch '/upvote', to: 'answers#upvote', as: 'upvote'
