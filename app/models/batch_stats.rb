@@ -1,0 +1,2 @@
+class BatchStats < ApplicationRecord
+end

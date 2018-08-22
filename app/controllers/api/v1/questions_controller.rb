@@ -12,6 +12,9 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   # Show action
   def show
     @user = User.find_by(name: params[:username])
+    define_user if @user.nil?
+    @badges = gamification(@user)
+    user_update(@user, @badges)
   end
   # Show action
 
@@ -59,12 +62,43 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   # Search action
   def search
+    @user = User.find_by(name: params[:username])
+    define_user if @user.nil?
     @questions = Question.search_by_subcategory_and_category(params[:query])
   end
   # Search action
 
 
   private
+
+
+  # Gamification action
+  def gamification(user)
+    answers = Answer.where(user_id: user.id)
+    number_of_answers = answers.length
+    number_of_questions = Question.where(user_id: user.id).length
+    badges = {}
+    voted_answers = []
+    answers.each { |answer| voted_answers.push(answer) if answer.votes > 0 }
+    number_of_answers > 10 ? badges[:helper] = true : badges[:helper] = false
+    number_of_questions > 25 ? badges[:active] = true : badges[:active] = false
+    voted_answers.length.to_f / number_of_answers >= 0.75 ? badges[:assertive] = true : badges[:assertive] = false
+    badges[:top25] = true
+    badges
+  end
+  # Gamification action
+
+
+  # User update action
+  def user_update(user, badges)
+    num_badges = badges.select { |key, value| value}.length
+    if user.number_of_badges != num_badges
+      user.number_of_badges = num_badges
+      user.save
+    end
+  end
+  # User update action
+
 
   def question_params
     params.require(:question).permit(:title, :content, :category, :subcategory)
@@ -88,4 +122,11 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     @user.save
     @user
   end
+
+  def define_user
+    @user = User.new(name: params[:username], email: params[:email], avatar: params[:avatar], password: "123654")
+    @user.save
+    @user
+  end
+
 end
