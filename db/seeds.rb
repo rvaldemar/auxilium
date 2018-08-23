@@ -7,8 +7,10 @@ puts 'deleted'
 
 puts 'creating'
 
+questions_categories = ["Experiment Methods", "Age in Days", "What is your Name", "Stupid Coaching", "Colourful Algorithm", "IP Address Converter", "Credit Card Checker", "Morse Code" ]
+
 userCount = 0
-15.times do
+5.times do
   userCount += 1
   email = "#{userCount.to_s}@email.com"
   password = "123654"
@@ -23,9 +25,9 @@ userCount = 0
 
   questions.times do
     title = Faker::OnePiece.akuma_no_mi
-    content = Faker::OnePiece.quote
+    content = "{\"ops\":[{\"insert\":\"Hello !\\nSome initial \"},{\"attributes\":{\"bold\":true},\"insert\":\"bold\"},{\"insert\":\" text\\n\\n\"}]}"
     user = User.find(userCount)
-    category = Faker::OnePiece.location
+    category = questions_categories.sample
     tags = "student"
     Question.create(title: title, content: content,
                 user: user, category: category, tags: tags)
@@ -34,9 +36,9 @@ end
 
 questionsNumber = Question.all.length
 
-30.times do
-  content = Faker::OnePiece.quote
-  user = User.find(rand(1..15))
+60.times do
+  content = "{\"ops\":[{\"insert\":\"Hello !\\nSome initial \"},{\"attributes\":{\"bold\":true},\"insert\":\"bold\"},{\"insert\":\" text\\n\\n\"}]}"
+  user = User.find(rand(1..5))
   question = Question.find(rand(1..questionsNumber))
   votes = rand(1..10)
   is_answer = false
@@ -45,10 +47,10 @@ questionsNumber = Question.all.length
               question: question, votes: votes, is_answer: is_answer, is_hint: is_hint)
 end
 
-20.times do
-  content = Faker::OnePiece.quote
-  user = User.find(rand(1..15))
-  answer = Answer.find(rand(1..30))
+50.times do
+  content = "{\"ops\":[{\"insert\":\"Hello !\\nSome initial \"},{\"attributes\":{\"bold\":true},\"insert\":\"bold\"},{\"insert\":\" text\\n\\n\"}]}"
+  user = User.find(rand(1..5))
+  answer = Answer.find(rand(1..60))
   votes = rand(1..8)
   is_answer = true
   is_hint = false
@@ -58,28 +60,3 @@ end
 
 
 puts 'finished'
-
-# puts 'finished creating users'
-
-# Repo.destroy_all
-# puts 'destroy old repos'
-
-# puts 'creating new repos'
-# 40.times do
-#   name = Faker::SiliconValley.invention
-#   description = Faker::Lorem.paragraph(2, true, 6)
-#   user_id = rand(1..4)
-#   Repo.create(name: name, description: description, user_id: user_id)
-# end
-# puts 'finished creating repos'
-
-# Collaboration.destroy_all
-# puts 'destroy old collabs'
-
-# 40.times do
-#   user_id = rand (1..4)
-#   repo_id = rand(1..10)
-#   accepted = 1
-#   Collaboration.create(user_id: user_id, repo_id: repo_id, accepted: accepted)
-# end
-# puts 'finished creating collabs'
