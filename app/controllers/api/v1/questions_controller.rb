@@ -64,6 +64,8 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   def search
     @user = User.find_by(name: params[:username])
     define_user if @user.nil?
+    @badges = gamification(@user)
+    user_update(@user, @badges)
     @questions = Question.search_by_subcategory_and_category(params[:query])
   end
   # Search action

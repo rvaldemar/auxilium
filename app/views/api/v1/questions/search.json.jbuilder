@@ -20,5 +20,6 @@ json.questions do
     json.extract! question.user, :name, :avatar
     key = calculates_time(question)
     json.extract! key, :time
+    json.extract! @badges, :helper, :active, :assertive
   end
 end
