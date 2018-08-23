@@ -21,5 +21,7 @@ json.questions do
     key = calculates_time(question)
     json.extract! key, :time
     json.extract! @badges, :helper, :active, :assertive
+
+    json.number_of_answers question.answers.length
   end
 end
