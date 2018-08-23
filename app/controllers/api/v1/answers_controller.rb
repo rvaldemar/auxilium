@@ -49,7 +49,6 @@ class Api::V1::AnswersController < Api::V1::BaseController
     if @answer.answer_votes.where(user_id: @user.id).length == 0
       @answer.votes += 1
       answer_vote = AnswerVote.create(user_id: @user.id, answer_id: @answer.id, vote: 1)
-      binding.pry
       @answer.save
       render :show and return
     end
