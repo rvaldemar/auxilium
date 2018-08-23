@@ -31,7 +31,7 @@ json.question do
 
       json.answer_votes do
         if answer.answer_votes.find_by(user_id: @user.id)
-          json.array! answer.answer_votes do |vote|
+          json.array! answer.answer_votes.where(user_id: @user.id) do |vote|
             json.extract! vote, :user_id, :vote, :user_name
           end
         end
